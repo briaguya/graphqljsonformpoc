@@ -5,11 +5,11 @@ var { makeExecutableSchema } = require('graphql-tools');
 
 var typeDefs = [`
 type Query {
-  foo: String
+  getSubmission(id: ID!): String
 }
 
 type Mutation {
-  bar(input: String): String 
+  submit(input: String): String 
 }
 
 schema {
@@ -17,15 +17,19 @@ schema {
   mutation: Mutation
 }`];
 
+var fakeDB = {};
+
 var resolvers = {
   Query: {
-    foo(root) {
-      return 'bar';
+    getSubmission(root, input) {
+      return fakeDB[input.id];
     }
   },
   Mutation: {
-    bar(root, input) {
-      return input.input;
+    submit(root, input) {
+      var id = require('crypto').randomBytes(10).toString('hex');
+      fakeDB[id] = input.input;
+      return id;
     }
   }
 };
