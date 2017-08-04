@@ -5,17 +5,27 @@ var { makeExecutableSchema } = require('graphql-tools');
 
 var typeDefs = [`
 type Query {
-  hello: String
+  foo: String
+}
+
+type Mutation {
+  bar(input: String): String 
 }
 
 schema {
-  query: Query
+  query: Query,
+  mutation: Mutation
 }`];
 
 var resolvers = {
   Query: {
-    hello(root) {
-      return 'world';
+    foo(root) {
+      return 'bar';
+    }
+  },
+  Mutation: {
+    bar(root, input) {
+      return input.input;
     }
   }
 };
