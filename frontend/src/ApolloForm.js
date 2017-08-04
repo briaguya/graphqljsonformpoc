@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import { gql, graphql } from 'react-apollo';
 import Form from 'react-jsonschema-form';
-
-const log = (type) => console.log.bind(console, type);
-
-const schema = {
-  foo: "bar",
-  type: "object",
-  required: ["foo"],
-  properties: {
-    foo: {type: "string", title: "foo", default: "bar"},
-  }
-};
+import schema from './schema';
 
 class ApolloForm extends Component {
   handleSubmit(e) {
@@ -25,15 +15,7 @@ class ApolloForm extends Component {
     });
   }
 
-  render() {    
-    return (
-        <Form schema={schema}
-          onChange={log("changed")}
-          onSubmit={this.handleSubmit.bind(this)}
-          onError={log("errors")}
-        />
-    )
-  }
+  render() { return ( <Form schema={schema} onSubmit={this.handleSubmit.bind(this)} /> ) }
 }
 
 const submitMutation = gql `
