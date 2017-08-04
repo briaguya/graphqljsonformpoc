@@ -2,27 +2,18 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Form from "react-jsonschema-form";
+import client from './apolloClientService';
+import { ApolloProvider } from 'react-apollo';
 
-const schema = {
-  foo: "bar",
-  type: "object",
-  required: ["foo"],
-  properties: {
-    foo: {type: "string", title: "foo", default: "bar"},
-  }
-};
-
-const log = (type) => console.log.bind(console, type);
+import ApolloForm from './ApolloForm';
 
 class App extends Component {
   render() {
     return (
-      <Form schema={schema}
-            onChange={log("changed")}
-            onSubmit={log("submitted")}
-            onError={log("errors")} />
-        );
+      <ApolloProvider client={client}>
+        <ApolloForm/>
+      </ApolloProvider>
+    );
   }
 }
 
