@@ -8,6 +8,14 @@ const schema = {
     number: {type: "number", title: "Number (Float)", default: 0.6},
     boolean: {type: "boolean", title: "Boolean", default: true},
     required: {type: "string", title: "Required", default: "Required"},
+    array: {
+      type: "array",
+      title: "Array",
+      items: {
+        type: "string",
+        default: "Six"
+      }
+    }
   }
 };
 
