@@ -1,10 +1,12 @@
 const schema = {
-  foo: "bar",
+  Title: "Title of the Form",
   type: "object",
-  required: ["foo"],
+  required: [],
   properties: {
-    foo: {type: "string", title: "foo", default: "bar"},
-    bar: {type: "string", title: "bar", default: "foo"},
+    string: {type: "string", title: "String", default: "Six"},
+    integer: {type: "integer", title: "Integer", default: 6},
+    number: {type: "number", title: "Number (Float)", default: 0.6},
+    boolean: {type: "boolean", title: "Boolean", default: true}, 
   }
 };
 
