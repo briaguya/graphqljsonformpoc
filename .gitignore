@@ -1,3 +1,5 @@
 tools/node_modules
 tools/lib
 formType.js
+schemaToGql/node_modules
+schemaToGql/lib
