@@ -14,8 +14,7 @@ var stream = fs.createWriteStream('formType.js');
 stream.once('open', function(fd) {
   stream.write("module.exports = `\n");
   _.forEach(schema.properties, function(value, key) {
-    console.log(key, value);
-    stream.write(key + ": " + typeStrings[value.type] + "\n");
+    stream.write(key + ": " + typeStrings[value.type] + (_.includes(schema.required, key) ? "!" : "") + "\n");
   });
   stream.write("`;");
   stream.end();
