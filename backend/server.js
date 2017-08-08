@@ -5,12 +5,23 @@ var { makeExecutableSchema } = require('graphql-tools');
 var cors = require('cors');
 
 var typeDefs = [`
+input FormSubmission {
+  foo: String
+  bar: String
+}
+
+type FormData {
+  id: ID!
+  foo: String
+  bar: String
+}
+
 type Query {
-  getSubmission(id: ID!): String
+  getFormData(id: ID!): FormData
 }
 
 type Mutation {
-  submit(input: String): String 
+  submit(input: FormSubmission): FormData
 }
 
 schema {
@@ -22,15 +33,16 @@ var fakeDB = {};
 
 var resolvers = {
   Query: {
-    getSubmission(root, input) {
+    getFormData(root, input) {
       return fakeDB[input.id];
     }
   },
   Mutation: {
     submit(root, input) {
       var id = require('crypto').randomBytes(10).toString('hex');
+      input.input.id = id;
       fakeDB[id] = input.input;
-      return id;
+      return fakeDB[id];
     }
   }
 };
