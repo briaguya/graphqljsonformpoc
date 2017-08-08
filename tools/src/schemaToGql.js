@@ -1,10 +1,18 @@
 import schema from './schema';
 import _ from 'lodash';
+import fs from 'fs';
 
-_.forEach(schema.properties, function(value, key) {
-  console.log(key, value);
+const typeStrings = {
+  'string': 'String'
+}
+
+var stream = fs.createWriteStream('formType.js');
+
+stream.once('open', function(fd) {
+  stream.write("module.exports = `\n");
+  _.forEach(schema.properties, function(value, key) {
+    stream.write(key + ": " + typeStrings[value.type] + "\n");
+  });
+  stream.write("`;");
+  stream.end();
 });
-
-// _.forEach(schema.properties, function(value) {
-//   console.log(value);
-// });

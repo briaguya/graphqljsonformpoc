@@ -4,7 +4,7 @@
   "main": "schemaToGql.js",
   "license": "MIT",
   "scripts": {
-    "start": "cp ../frontend/src/schema.js src; yarn transpile; node lib/schemaToGql.js",
+    "start": "cp ../frontend/src/schema.js src; yarn transpile; node lib/schemaToGql.js; cp formType.js ../backend",
     "start-no-copy": "yarn transpile; node lib/schemaToGql.js",
     "transpile": "babel src -d lib"
   },
