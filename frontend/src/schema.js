@@ -35,6 +35,14 @@ const schema = {
           boolean: {type: "boolean", title: "Boolean", default: true}
         }
       }
+    },
+    fixedarray: {
+      type: "array",
+      title: "FixedArray",
+      items: [
+        {type: "string", title: "String", default: "Six"},
+        {type: "boolean", title: "Boolean", default: true}
+      ]
     }
   }
 };

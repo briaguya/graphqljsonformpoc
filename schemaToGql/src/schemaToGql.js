@@ -11,7 +11,18 @@ const typeStrings = {
 
 var types = {};
 
-function getGqlLine(value, key, required, input) {
+function getGqlLine(value, key, required, input, isFixedArray) {
+  if(isFixedArray) {
+    var line =
+      "  " + key + ": " +
+      value.title +
+      (input ? "Input" : "") +
+      (required ? "!" : "") +
+      "\n";
+
+    return line;
+  }
+
   var line =
     "  " + key + ": " +
     (value.type == 'array' ? "[" : "") +
@@ -29,6 +40,19 @@ function getGqlLine(value, key, required, input) {
   return line;
 }
 
+function fixedArrayToObject(fixedArray) {
+  var count = 0;
+  var props = _.keyBy(fixedArray.items, function() {
+    return (count++).toString();
+  });
+
+  return {
+    type: fixedArray.type,
+    title: fixedArray.title,
+    properties: props
+  };
+}
+
 function getObjectGql(objectSchema, addId = false, input = false) {
   var gql = "";
 
@@ -38,11 +62,23 @@ function getObjectGql(objectSchema, addId = false, input = false) {
 
   _.forEach(objectSchema.properties, function(value, key) {
     var isObject = value.type == 'object' || (value.items != null && value.items.type == 'object');
-    gql += getGqlLine(value, key, _.includes(objectSchema.required, key), input && isObject);
+    var isFixedArray = value.type == 'array' && _.isArray(value.items);
+
+    gql += getGqlLine(value, key, _.includes(objectSchema.required, key), input && (isObject || isFixedArray), isFixedArray);
+    
     if (value.type == 'object') {
       types[(input ? "input " : "type ") + value.title + (input ? "Input" : "")] = getObjectGql(value);
-    } else if (value.type == 'array' && isObject) {
+      return;
+    };
+
+    if (value.type == 'array' && isObject && !isFixedArray) {
       types[(input ? "input " : "type ") + value.items.title + (input ? "Input" : "")] = getObjectGql(value.items);
+      return;
+    };
+
+    if (isFixedArray) {
+      types[(input ? "input " : "type ") + value.title + (input ? "Input" : "")] = getObjectGql(fixedArrayToObject(value));
+      return;
     };
   });
 
