@@ -1,0 +1,16 @@
+{
+  "name": "schematogql",
+  "version": "1.0.0",
+  "main": "schemaToGql.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "cp ../frontend/src/schema.js src; yarn transpile; node lib/schemaToGql.js",
+    "start-no-copy": "yarn transpile; node lib/schemaToGql.js",
+    "transpile": "babel src -d lib"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0"
+  },
+  "dependencies": {}
+}
