@@ -16,14 +16,14 @@ const schema = {
         default: "Six"
       }
     },
-    // object: {
-    //   type: "object",
-    //   title: "Object",
-    //   properties: {
-    //     string: {type: "string", title: "String", default: "Six"},
-    //     boolean: {type: "boolean", title: "Boolean", default: true}
-    //   }
-    // }
+    object: {
+      type: "object",
+      title: "Object",
+      properties: {
+        string: {type: "string", title: "String", default: "Six"},
+        boolean: {type: "boolean", title: "Boolean", default: true}
+      }
+    }
   }
 };
 

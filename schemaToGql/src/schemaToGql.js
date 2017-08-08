@@ -11,7 +11,7 @@ const typeStrings = {
 
 var types = {};
 
-function getObjectGql(objectSchema, addId = false) {
+function getObjectGql(objectSchema, addId = false, input = false) {
   var gql = "";
 
   if (addId) {
@@ -20,19 +20,24 @@ function getObjectGql(objectSchema, addId = false) {
 
   _.forEach(objectSchema.properties, function(value, key) {
     if (value.type == 'array') {
-      gql += ("  " + key + ": [" + typeStrings[value.items.type] + "]\n");
+      gql += "  " + key + ": [" + typeStrings[value.items.type] + "]\n";
     } else if (value.type == 'object') {
-      console.log(value);
+        if (input) {
+          types["input " + value.title + "Input"] = getObjectGql(value);
+          gql += "  " + key + ": " + value.title + "Input\n";
+        } else {
+          types["type " + value.title] = getObjectGql(value);
+          gql += "  " + key + ": " + value.title + "\n";
+        }
     } else {
-      gql += ("  " + key + ": " + typeStrings[value.type] + (_.includes(objectSchema.required, key) ? "!" : "") + "\n");
+      gql += "  " + key + ": " + typeStrings[value.type] + (_.includes(objectSchema.required, key) ? "!" : "") + "\n";
     };
   });
 
-  console.log(gql);
   return gql;
 }
 
-types["input FormSubmission"] = getObjectGql(schema);
+types["input FormSubmission"] = getObjectGql(schema, false, true);
 types["type FormData"] = getObjectGql(schema, true);
 
 var stream = fs.createWriteStream('formTypes.js');
