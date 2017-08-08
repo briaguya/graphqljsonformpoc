@@ -11,6 +11,22 @@ const typeStrings = {
 
 var types = {};
 
+function getGqlLine(value, key, required, input) {
+  var line =
+    "  " + key + ": " +
+    (value.type == 'array' ? "[" : "") +
+    (value.type == 'object' ?
+      value.title :
+      (value.type == 'array' ?
+        (value.items.type == 'object' ?
+          value.items.title :
+          typeStrings[value.items.type]) : 
+        typeStrings[value.type])) +
+    (required ? "!" : "") +
+    (value.type == 'array' ? "]" : "");
+  return line;
+}
+
 function getObjectGql(objectSchema, addId = false, input = false) {
   var gql = "";
 
@@ -19,18 +35,16 @@ function getObjectGql(objectSchema, addId = false, input = false) {
   }
 
   _.forEach(objectSchema.properties, function(value, key) {
-    if (value.type == 'array') {
-      gql += "  " + key + ": [" + typeStrings[value.items.type] + "]\n";
-    } else if (value.type == 'object') {
-        if (input) {
-          types["input " + value.title + "Input"] = getObjectGql(value);
-          gql += "  " + key + ": " + value.title + "Input\n";
-        } else {
-          types["type " + value.title] = getObjectGql(value);
-          gql += "  " + key + ": " + value.title + "\n";
-        }
-    } else {
-      gql += "  " + key + ": " + typeStrings[value.type] + (_.includes(objectSchema.required, key) ? "!" : "") + "\n";
+    var line = getGqlLine(value, key, _.includes(objectSchema.required, key), input);
+    console.log(line);
+    if (value.type == 'object') {
+      if (input) {
+        types["input " + value.title + "Input"] = getObjectGql(value);
+        gql += "  " + key + ": " + value.title + "Input\n";
+      } else {
+        types["type " + value.title] = getObjectGql(value);
+        gql += "  " + key + ": " + value.title + "\n";
+      }
     };
   });
 

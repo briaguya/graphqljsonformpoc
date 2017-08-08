@@ -23,6 +23,18 @@ const schema = {
         string: {type: "string", title: "String", default: "Six"},
         boolean: {type: "boolean", title: "Boolean", default: true}
       }
+    },
+    objectarray: {
+      type: "array",
+      title: "Object Array",
+      items: {
+        type: "object",
+        title: "ArrayObject",
+        properties: {
+          string: {type: "string", title: "String", default: "Six"},
+          boolean: {type: "boolean", title: "Boolean", default: true}
+        }
+      }
     }
   }
 };
