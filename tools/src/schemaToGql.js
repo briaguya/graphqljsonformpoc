@@ -14,7 +14,12 @@ var stream = fs.createWriteStream('formType.js');
 stream.once('open', function(fd) {
   stream.write("module.exports = `\n");
   _.forEach(schema.properties, function(value, key) {
-    stream.write(key + ": " + typeStrings[value.type] + (_.includes(schema.required, key) ? "!" : "") + "\n");
+    if(value.type == 'array') {
+      console.log(value);
+      stream.write(key + ": [" + typeStrings[value.items.type] + (_.includes(schema.required, key) ? "!" : "") + "]\n");
+    } else {
+      stream.write(key + ": " + typeStrings[value.type] + (_.includes(schema.required, key) ? "!" : "") + "\n");
+    };
   });
   stream.write("`;");
   stream.end();
