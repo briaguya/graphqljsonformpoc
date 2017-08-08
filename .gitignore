@@ -3,3 +3,4 @@ tools/lib
 formType.js
 schemaToGql/node_modules
 schemaToGql/lib
+formTypes.js

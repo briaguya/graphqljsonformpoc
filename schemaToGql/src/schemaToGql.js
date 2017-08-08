@@ -15,16 +15,16 @@ function getObjectGql(objectSchema, addId = false) {
   var gql = "";
 
   if (addId) {
-    gql += "id: ID!\n";
+    gql += "  id: ID!\n";
   }
 
   _.forEach(objectSchema.properties, function(value, key) {
     if (value.type == 'array') {
-      gql += (key + ": [" + typeStrings[value.items.type] + "]\n");
+      gql += ("  " + key + ": [" + typeStrings[value.items.type] + "]\n");
     } else if (value.type == 'object') {
       console.log(value);
     } else {
-      gql += (key + ": " + typeStrings[value.type] + (_.includes(objectSchema.required, key) ? "!" : "") + "\n");
+      gql += ("  " + key + ": " + typeStrings[value.type] + (_.includes(objectSchema.required, key) ? "!" : "") + "\n");
     };
   });
 
@@ -34,15 +34,17 @@ function getObjectGql(objectSchema, addId = false) {
 
 types["input FormSubmission"] = getObjectGql(schema);
 types["type FormData"] = getObjectGql(schema, true);
-console.log("BLARG");
-console.log(types);
-console.log("BLLLAAARRRGGG");
-_.forEach(types, function(value, key) {
-  console.log(key + " {");
-  console.log(value + "}\n");
-  // console.log("}\n");
-});
 
+var stream = fs.createWriteStream('formTypes.js');
+stream.once('open', function(fd) {
+  stream.write("module.exports = `\n");
+  _.forEach(types, function(value, key) {
+    stream.write(key + " {\n");
+    stream.write(value + "}\n\n");
+  });
+  stream.write("`;");
+  stream.end();
+});
 
 // var stream = fs.createWriteStream('formType.js');
 // stream.once('open', function(fd) {

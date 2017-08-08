@@ -1,14 +1,6 @@
-var formType = require('./formType');
+var formTypes = require('./formTypes');
 
-module.exports = [`
-input FormSubmission {` +
-formType
-+ `}
-
-type FormData {
-  id: ID!` +
-formType
-+ `}
+module.exports = [formTypes + `
 
 type Query {
   submission(id: ID!): FormData
