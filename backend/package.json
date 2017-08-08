@@ -8,6 +8,7 @@
     "express": "^4.15.3",
     "graphql": "^0.10.5",
     "graphql-server-express": "^1.0.5",
-    "graphql-tools": "^1.1.0"
+    "graphql-tools": "^1.1.0",
+    "lodash": "^4.17.4"
   }
 }

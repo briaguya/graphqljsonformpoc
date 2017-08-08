@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 var { makeExecutableSchema } = require('graphql-tools');
 var cors = require('cors');
+var _ = require('lodash');
 
 var typeDefs = [`
 input FormSubmission {
@@ -17,7 +18,8 @@ type FormData {
 }
 
 type Query {
-  getFormData(id: ID!): FormData
+  submission(id: ID!): FormData
+  submissions: [FormData]
 }
 
 type Mutation {
@@ -29,20 +31,19 @@ schema {
   mutation: Mutation
 }`];
 
-var fakeDB = {};
+var fakeDB = {submissions:{}};
 
 var resolvers = {
   Query: {
-    getFormData(root, input) {
-      return fakeDB[input.id];
-    }
+    submission: (_, {id}) => fakeDB.submissions[id],
+    submissions: () => _.values(fakeDB.submissions),
   },
   Mutation: {
     submit(root, input) {
       var id = require('crypto').randomBytes(10).toString('hex');
       input.input.id = id;
-      fakeDB[id] = input.input;
-      return fakeDB[id];
+      fakeDB.submissions[id] = input.input;
+      return fakeDB.submissions[id];
     }
   }
 };
